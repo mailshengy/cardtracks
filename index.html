@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Dashboard</title>
+    <style>
+        /* --- 1. EXISTING DASHBOARD STYLES --- */
+        :root {
+            font-family: system-ui, -apple-system, sans-serif;
+            --bg: #f5f4f1;
+            --accent: #bfa27a;
+            --accent-dark: #9b825f;
+            --text: #222222;
+            --muted: #6e6e6e;
+            --card: #ffffff;
+            --danger: #a63434;
+            --danger-bg: #fff0f0; /* Light red background */
+        }
+        body { background: var(--bg); padding: 40px; margin: 0; }
+        
+        /* Grid Layout for the Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+       /* --- 2. CARD COMPONENT STYLES --- */
+        /* Changed to target 'a.card' to handle link styling */
+        a.card { 
+            text-decoration: none; /* Removes underline from link */
+            color: inherit; /* Prevents text from turning blue */
+            display: block; /* Ensures it behaves like a box */
+            background: var(--card); 
+            padding: 24px; 
+            border-radius: 14px; 
+            border: 1px solid rgba(0, 0, 0, 0.05); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
+            display: flex; 
+            flex-direction: column;
+            cursor: pointer; /* Shows hand icon on hover */
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            position: relative;
+        }
+
+        /* Hover Effect: Lift up + Highlight Border */
+        a.card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08); 
+            border-color: var(--accent);
+        }
+
+        /* Add a tiny external link icon in top right corner for affordance */
+        a.card::after {
+            content: "↗";
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            font-size: 1.2rem;
+            color: var(--muted);
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.2s ease;
+        }
+        a.card:hover::after {
+            opacity: 1; /* Shows on hover */
+            color: var(--accent);
+        }
+
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
+        .card-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); }
+        
+        .due-pill { 
+            background: rgba(185, 162, 138, 0.15); 
+            color: var(--accent-dark); 
+            font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; font-weight: 600; letter-spacing: 0.05em; transition: all 0.3s ease;
+            margin-right: 25px; /* Make space for the hover arrow */
+        }
+        .due-pill.urgent {
+            background-color: var(--danger-bg); color: var(--danger); border: 1px solid rgba(166, 52, 52, 0.2); animation: pulse 2s infinite;
+        }
+
+         /* Typography */
+        .card-title { font-size: 1.1rem; font-weight: 600; color: var(--text); text-transform: uppercase; line-height: 1.2; }
+        .card-number { font-family: monospace; font-size: 1rem; color: var(--accent-dark); letter-spacing: 0.05em; margin-bottom: 20px; }
+
+          /* Data Rows */
+        .data-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px; border-bottom: 1px dashed #eee; padding-bottom: 4px; }
+        .data-row:last-of-type { border-bottom: none; }
+        .data-label { color: var(--muted); }
+        .data-val { font-weight: 500; text-align: right; }
+        
+        /* Progress Bars */
+        .progress-container { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed #e0e0e0; }
+        .cat-progress-row { margin-bottom: 12px; }
+        .progress-stats { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; }
+        .cat-name { font-weight: 600; color: var(--text); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;}
+        .cat-math { font-size: 0.75rem; color: var(--muted); font-family: monospace;}
+        .cat-math strong { color: var(--text); }
+        
+        .progress-track { width: 100%; height: 6px; background-color: #f0f0f0; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: var(--accent-dark); border-radius: 10px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .progress-fill.over-limit { background-color: var(--danger); }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(166, 52, 52, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(166, 52, 52, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(166, 52, 52, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="card-grid" class="card-grid"></div>
+
+    <script>
+        // *** 1. YOUR DATA CONFIGURATION ***
+        const cardData = [
+           
+            {
+                bank: "UOB",
+                name: "CF PREF PLATINUM",
+                number: "3133",
+                expiry: "04/28",
+                dueDay: 21,
+                perks: "4mpd",
+                sheetLink: "#",
+                // Two separate caps as requested
+                caps: [
+                    { name: "Contactless", limit: 600, spent: 153 }, // Example spend
+                    { name: "Online - LZ, SP, AMZN, TB", limit: 600, spent: 340 },   // Example spend
+                    
+                ]
+            },
+        ];
+
+        // *** 2. RENDER LOGIC ***
+        function renderCards() {
+            const container = document.getElementById('card-grid');
+            const today = new Date().getDate(); 
+            
+            container.innerHTML = '';
+
+            cardData.forEach(card => {
+                // A. Due Date Logic (Check if within 3 days)
+                let isUrgent = false;
+                
+                // Handle date wrapping (e.g. Due 1st, Today 30th) logic simplified for this view:
+                // We focus on the simple "Same month approaching" case as requested.
+                const daysUntil = card.dueDay - today;
+                if (daysUntil >= 0 && daysUntil <= 3) {
+                    isUrgent = true;
+                }
+                
+                // B. Generate Progress Bars HTML
+                let progressHTML = '';
+                card.caps.forEach(cap => {
+                    const percentage = Math.min((cap.spent / cap.limit) * 100, 100);
+                    const isOver = cap.spent > cap.limit;
+                    
+                    progressHTML += `
+                        <div class="cat-progress-row">
+                            <div class="progress-stats">
+                                <span class="cat-name">${cap.name}</span>
+                                <span class="cat-math"><strong>$${cap.spent}</strong> / $${cap.limit}</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill ${isOver ? 'over-limit' : ''}" style="width: ${percentage}%;"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+               // CHANGED: The main wrapper is now an <a href> tag
+                const cardHTML = `
+                    <a href="${card.sheetLink}" target="_blank" class="card">
+                        <div class="card-header">
+                            <span class="card-label">${card.bank}</span>
+                            <span class="due-pill ${isUrgent ? 'urgent' : ''}">Due: ${card.dueDay}${getOrdinal(card.dueDay)}</span>
+                        </div>
+
+                        <div class="card-title">${card.name}</div>
+                        <div class="card-number">${card.number}</div>
+
+                        <div class="progress-container">
+                            ${progressHTML}
+                        </div>
+
+                        <div class="data-row">
+                            <span class="data-label">Expiry</span>
+                            <span class="data-val">${card.expiry}</span>
+                        </div>
+                        
+                        <div class="data-row">
+                            <span class="data-label">Perks</span>
+                            <span class="data-val" style="color:var(--muted)">${card.perks}</span>
+                        </div>
+                    </a>
+                `;
+
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        function getOrdinal(n) {
+            const s = ["th", "st", "nd", "rd"];
+            const v = n % 100;
+            return s[(v - 20) % 10] || s[v] || s[0];
+        }
+  // Wait for DOM to load before running
+        document.addEventListener('DOMContentLoaded', renderCards);
+    </script>
+</body>
+</html>
