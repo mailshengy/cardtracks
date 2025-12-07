@@ -173,7 +173,7 @@
         // 1. Deploy your Google Apps Script as a Web App
         // 2. Set "Who has access" to "Anyone"
         // 3. Paste the URL inside the quotes below:
-        const API_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE"; 
+        const API_URL = "https://script.google.com/macros/s/AKfycbxHLLcpKFbZc1YEdoCBVILoG1bsMmxHEhZ7EFuzleVLQw5pyKkgdnHjGceEKbdwFfg/exec"; 
         
         let globalCardData = []; // Store fetched data for modal access
 
@@ -181,7 +181,7 @@
         async function initDashboard() {
             const container = document.getElementById('card-grid');
 
-            if (API_URL === "https://script.google.com/macros/s/AKfycbxHLLcpKFbZc1YEdoCBVILoG1bsMmxHEhZ7EFuzleVLQw5pyKkgdnHjGceEKbdwFfg/exec") {
+            if (API_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
                 container.innerHTML = '<div class="error">Please update the API_URL in the code with your Google Apps Script Web App link.</div>';
                 return;
             }
