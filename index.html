@@ -52,24 +52,23 @@
             border-color: var(--accent);
         }
 
-        /* Hover Icon (changed to 'i' for info/details) */
+        /* Hover Icon: Changed from ℹ to a custom SVG */
         .card::after {
-            content: "ℹ";
-            font-family: monospace;
+            /* Removed content: "ℹ"; */
             position: absolute;
             top: 24px;
             right: 24px;
-            font-size: 1.2rem;
-            color: var(--muted);
+            width: 24px; 
+            height: 24px;
             opacity: 0;
             transition: opacity 0.2s ease;
-            background: #f0f0f0;
-            width: 24px; height: 24px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            /* Using a mask/background image to render the SVG style icon */
+            background-color: var(--muted);
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E") no-repeat 50% 50%;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E") no-repeat 50% 50%;
+            mask-size: cover; /* Make sure the icon fills the 24x24 area */
         }
-        .card:hover::after { opacity: 1; color: var(--accent-dark); }
-
+        .card:hover::after { opacity: 1; background-color: var(--accent-dark); }
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
         .card-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); }
         
@@ -132,6 +131,13 @@
         .modal-body { padding: 20px; overflow-y: auto; }
         
         /* History Items */
+        /* Added a divider for card-specific info in the modal */
+        .modal-info-divider {
+            display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e0e0e0; margin-bottom: 15px;
+            font-size: 0.85rem; color: var(--muted);
+        }
+        .modal-info-divider strong { color: var(--text); font-weight: 500; }
+        
         .hist-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
         .hist-row:last-child { border-bottom: none; }
         .hist-info { display: flex; flex-direction: column; gap: 2px; }
@@ -248,11 +254,6 @@
                         <div class="progress-container">
                             ${progressHTML}
                         </div>
-
-                        <div class="data-row">
-                            <span class="data-label">Expiry</span>
-                            <span class="data-val">${card.expiry}</span>
-                        </div>
                         
                         <div class="data-row">
                             <span class="data-label">Perks</span>
@@ -275,14 +276,23 @@
             title.innerText = `${card.bank} ${card.name}`;
             body.innerHTML = '';
 
+            // Add Expiry Date to the modal body
+            let modalContent = `
+                <div class="modal-info-divider">
+                    <span>Card Number: <strong>**** ${card.number}</strong></span>
+                    <span>Expiry: <strong>${card.expiry}</strong></span>
+                </div>
+            `;
+
+
             // Sort history: Newest first
             const sortedHistory = card.history.sort((a, b) => new Date(b.date) - new Date(a.date));
 
             if (sortedHistory.length === 0) {
-                body.innerHTML = '<p style="text-align:center; color:var(--muted); margin-top:20px;">No transactions recorded this period.</p>';
+                modalContent += '<p style="text-align:center; color:var(--muted); margin-top:20px;">No transactions recorded this period.</p>';
             } else {
                 sortedHistory.forEach(tx => {
-                    body.innerHTML += `
+                    modalContent += `
                         <div class="hist-row">
                             <div class="hist-info">
                                 <span class="hist-merch">${tx.merchant}</span>
@@ -296,6 +306,8 @@
                     `;
                 });
             }
+
+            body.innerHTML = modalContent; // Update the modal body
 
             modal.style.display = 'flex';
             // Slight delay to allow display:flex to apply before adding opacity class for transition
