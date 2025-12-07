@@ -274,15 +274,17 @@
             const body = document.getElementById('modal-body');
 
             title.innerText = `${card.bank} ${card.name}`;
-            body.innerHTML = '';
-
-            // Add Expiry Date to the modal body
-            let modalContent = `
+            `
                 <div class="modal-info-divider">
-                    <span>Card Number: <strong>**** ${card.number}</strong></span>
+                    ${card.number}</strong></span>
                     <span>Expiry: <strong>${card.expiry}</strong></span>
                 </div>
             `;
+            body.innerHTML = '';
+
+            // Add Expiry Date to the modal body
+            let modalContent = 
+            
 
 
             // Sort history: Newest first
