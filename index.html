@@ -52,9 +52,8 @@
             border-color: var(--accent);
         }
 
-        /* Hover Icon: Changed from ℹ to a custom SVG */
+        /* Hover Icon */
         .card::after {
-            /* Removed content: "ℹ"; */
             position: absolute;
             top: 24px;
             right: 24px;
@@ -62,21 +61,20 @@
             height: 24px;
             opacity: 0;
             transition: opacity 0.2s ease;
-            /* Using a mask/background image to render the SVG style icon */
             background-color: var(--muted);
             -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E") no-repeat 50% 50%;
             mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E") no-repeat 50% 50%;
-            mask-size: cover; /* Make sure the icon fills the 24x24 area */
+            mask-size: cover; 
         }
         .card:hover::after { opacity: 1; background-color: var(--accent-dark); }
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
-        .card-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); }
+        .card-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); }
         
         .due-pill { 
             background: rgba(185, 162, 138, 0.15); 
             color: var(--accent-dark); 
             font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; font-weight: 600; letter-spacing: 0.05em; transition: all 0.3s ease;
-            margin-right: 25px; 
+            margin-right: 0; 
         }
         .due-pill.urgent {
             background-color: var(--danger-bg); color: var(--danger); border: 1px solid rgba(166, 52, 52, 0.2); animation: pulse 2s infinite;
@@ -87,10 +85,10 @@
         .card-number { font-family: monospace; font-size: 1rem; color: var(--accent-dark); letter-spacing: 0.05em; margin-bottom: 20px; }
 
         /* Data Rows */
-        .data-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px; border-bottom: 1px dashed #eee; padding-bottom: 4px; }
+        .data-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; border-bottom: 1px dashed #eee; padding-bottom: 3px; }
         .data-row:last-of-type { border-bottom: none; }
-        .data-label { color: var(--muted); }
-        .data-val { font-weight: 500; text-align: right; }
+        .data-label { font-size: 0.7rem; font-weight: 400; color: var(--muted); }
+        .data-val { font-size: 0.7rem; font-weight: 400; text-align: right; }
         
         /* Progress Bars */
         .progress-container { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed #e0e0e0; }
@@ -122,29 +120,39 @@
         .modal-overlay.show .modal-content { transform: translateY(0); }
 
         .modal-header {
-            padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: flex-start;
         }
-        .modal-title { margin: 0; font-size: 1.1rem; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em; }
-        .close-btn { background: none; border: none; font-size: 1.8rem; line-height: 1; cursor: pointer; color: var(--muted); padding: 0 5px; }
+        
+        /* New Wrapper for modal header details */
+        .modal-header-details {
+            display: flex; flex-direction: column;
+        }
+        
+        /* Style for Bank Name in Modal (matches .card-label) */
+        .modal-bank-label {
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); margin-bottom: 4px;
+        }
+        
+        .modal-title { margin: 0; font-size: 1.1rem; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+        
+        /* Style for Card Number/Expiry in Modal Header */
+        .modal-card-meta {
+            font-family: monospace; font-size: 0.9rem; color: var(--accent-dark); letter-spacing: 0.05em; margin-top: 6px;
+        }
+
+        .close-btn { background: none; border: none; font-size: 1.8rem; line-height: 1; cursor: pointer; color: var(--muted); padding: 0 5px; margin-left: 10px; }
         .close-btn:hover { color: var(--danger); }
 
         .modal-body { padding: 20px; overflow-y: auto; }
         
         /* History Items */
-        /* Added a divider for card-specific info in the modal */
-        .modal-info-divider {
-            display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e0e0e0; margin-bottom: 15px;
-            font-size: 0.85rem; color: var(--muted);
-        }
-        .modal-info-divider strong { color: var(--text); font-weight: 500; }
-        
         .hist-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
         .hist-row:last-child { border-bottom: none; }
         .hist-info { display: flex; flex-direction: column; gap: 2px; }
         .hist-merch { font-weight: 600; color: var(--text); font-size: 0.9rem; }
         .hist-meta { font-size: 0.75rem; color: var(--muted); display: flex; gap: 8px; }
         .hist-tag { background: #f0f0f0; padding: 1px 6px; border-radius: 3px; font-size: 0.7rem; }
-        .hist-amt { font-weight: 600; color: var(--accent-dark); font-family: monospace; font-size: 0.95rem; }
+        .hist-amt { font-weight: 400; color: var(--accent-dark); font-family: monospace; font-size: 0.95rem; }
 
         /* Loading & Error States */
         .loading { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 40px; font-style: italic; }
@@ -166,7 +174,8 @@
     <div id="history-modal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modal-title" class="modal-title">History</h2>
+                <div id="modal-header-info" class="modal-header-details">
+                    </div>
                 <button class="close-btn" onclick="closeModal(event)">×</button>
             </div>
             <div id="modal-body" class="modal-body">
@@ -176,9 +185,6 @@
 
     <script>
         // *** CONFIGURATION ***
-        // 1. Deploy your Google Apps Script as a Web App
-        // 2. Set "Who has access" to "Anyone"
-        // 3. Paste the URL inside the quotes below:
         const API_URL = "https://script.google.com/macros/s/AKfycbxHLLcpKFbZc1YEdoCBVILoG1bsMmxHEhZ7EFuzleVLQw5pyKkgdnHjGceEKbdwFfg/exec"; 
         
         let globalCardData = []; // Store fetched data for modal access
@@ -216,7 +222,6 @@
                 // A. Urgent Status
                 let isUrgent = false;
                 const daysUntil = card.dueDay - today;
-                // Simple logic: if due within 3 days (positive number)
                 if (daysUntil >= 0 && daysUntil <= 3) isUrgent = true;
                 
                 // B. Progress Bars
@@ -224,6 +229,8 @@
                 card.caps.forEach(cap => {
                     const percentage = Math.min((cap.spent / cap.limit) * 100, 100);
                     const isOver = cap.spent > cap.limit;
+                    
+                    // Dashboard uses NO DECIMALS
                     const spentFmt = formatCurrency(cap.spent);
                     const limitFmt = formatCurrency(cap.limit);
                     
@@ -256,7 +263,7 @@
                         </div>
                         
                         <div class="data-row">
-                            <span class="data-label">Perks</span>
+                            <span class="data-label">Notes</span>
                             <span class="data-val" style="color:var(--muted)">${card.perks}</span>
                         </div>
                     </div>
@@ -270,22 +277,22 @@
         function openHistory(index) {
             const card = globalCardData[index];
             const modal = document.getElementById('history-modal');
-            const title = document.getElementById('modal-title');
+            const headerInfo = document.getElementById('modal-header-info');
             const body = document.getElementById('modal-body');
 
-            title.innerText = `${card.bank} ${card.name}`;
-            
-            body.innerHTML = '';
-
-            // Add Expiry Date to the modal body
-            let modalContent = `
-                <div class="modal-info-divider">
-                    ${card.number}</strong></span>
-                    <span>Expiry: <strong>${card.expiry}</strong></span>
+            // 1. UPDATE HEADER
+            // Bank Name (styled like card-label) + Title + Number/Expiry moved here
+            headerInfo.innerHTML = `
+                <span class="modal-bank-label">${card.bank}</span>
+                <h2 class="modal-title">${card.name}</h2>
+                <div class="modal-card-meta">
+                    ${card.number} • Exp: ${card.expiry}
                 </div>
             `;
             
-
+            // 2. UPDATE BODY
+            body.innerHTML = '';
+            let modalContent = '';
 
             // Sort history: Newest first
             const sortedHistory = card.history.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -294,6 +301,7 @@
                 modalContent += '<p style="text-align:center; color:var(--muted); margin-top:20px;">No transactions recorded this period.</p>';
             } else {
                 sortedHistory.forEach(tx => {
+                    // Modal uses WITH DECIMALS for amounts
                     modalContent += `
                         <div class="hist-row">
                             <div class="hist-info">
@@ -303,7 +311,7 @@
                                     <span class="hist-tag">${tx.category}</span>
                                 </div>
                             </div>
-                            <span class="hist-amt">${formatCurrency(tx.amount)}</span>
+                            <span class="hist-amt">${formatCurrencyDecimals(tx.amount)}</span>
                         </div>
                     `;
                 });
@@ -312,7 +320,6 @@
             body.innerHTML = modalContent; // Update the modal body
 
             modal.style.display = 'flex';
-            // Slight delay to allow display:flex to apply before adding opacity class for transition
             setTimeout(() => { modal.classList.add('show'); }, 10);
         }
 
@@ -331,7 +338,13 @@
             return s[(v - 20) % 10] || s[v] || s[0];
         }
 
+        // Default formatter: No decimals (for Dashboard)
         function formatCurrency(amount) {
+            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+
+        // New formatter: With decimals (for History Modal)
+        function formatCurrencyDecimals(amount) {
             return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
