@@ -18,7 +18,7 @@
             --danger-bg: #fff0f0;
         }
         body { background: var(--bg); padding: 40px; margin: 0; }
-        
+       
         /* Grid Layout */
         .card-grid {
             display: grid;
@@ -27,69 +27,64 @@
             max-width: 1100px;
             margin: 0 auto;
         }
-
         /* --- 2. CARD COMPONENT STYLES --- */
-        .card { 
+        .card {
             text-decoration: none;
             color: inherit;
             display: block;
-            background: var(--card); 
-            padding: 24px; 
-            border-radius: 14px; 
-            border: 1px solid rgba(0, 0, 0, 0.05); 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
-            display: flex; 
+            background: var(--card);
+            padding: 24px;
+            border-radius: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex;
             flex-direction: column;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             position: relative;
         }
-
         /* Hover Effect */
-        .card:hover { 
-            transform: translateY(-4px); 
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08); 
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
             border-color: var(--accent);
         }
-
         /* Hover Icon */
         .card::after {
             position: absolute;
             top: 24px;
             right: 24px;
-            width: 24px; 
+            width: 24px;
             height: 24px;
             opacity: 0;
             transition: opacity 0.2s ease;
             background-color: var(--muted);
             -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E") no-repeat 50% 50%;
             mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E") no-repeat 50% 50%;
-            mask-size: cover; 
+            mask-size: cover;
         }
         .card:hover::after { opacity: 1; background-color: var(--accent-dark); }
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
         .card-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); }
-        
-        .due-pill { 
-            background: rgba(185, 162, 138, 0.15); 
-            color: var(--accent-dark); 
+       
+        .due-pill {
+            background: rgba(185, 162, 138, 0.15);
+            color: var(--accent-dark);
             font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; font-weight: 600; letter-spacing: 0.05em; transition: all 0.3s ease;
-            margin-right: 0; 
+            margin-right: 0;
         }
         .due-pill.urgent {
             background-color: var(--danger-bg); color: var(--danger); border: 1px solid rgba(166, 52, 52, 0.2); animation: pulse 2s infinite;
         }
-
         /* Typography */
         .card-title { font-size: 1.1rem; font-weight: 600; color: var(--text); text-transform: uppercase; line-height: 1.2; }
         .card-number { font-family: monospace; font-size: 1rem; color: var(--accent-dark); letter-spacing: 0.05em; margin-bottom: 20px; }
-
         /* Data Rows */
         .data-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; border-bottom: 1px dashed #eee; padding-bottom: 3px; }
         .data-row:last-of-type { border-bottom: none; }
         .data-label { font-size: 0.7rem; font-weight: 400; color: var(--muted); }
         .data-val { font-size: 0.7rem; font-weight: 400; text-align: right; }
-        
+       
         /* Progress Bars */
         .progress-container { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed #e0e0e0; }
         .cat-progress-row { margin-bottom: 12px; }
@@ -97,11 +92,10 @@
         .cat-name { font-weight: 600; color: var(--text); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;}
         .cat-math { font-size: 0.75rem; color: var(--muted); font-family: monospace;}
         .cat-math strong { color: var(--text); }
-        
+       
         .progress-track { width: 100%; height: 6px; background-color: #f0f0f0; border-radius: 10px; overflow: hidden; }
         .progress-fill { height: 100%; background-color: var(--accent-dark); border-radius: 10px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
         .progress-fill.over-limit { background-color: var(--danger); }
-
         /* --- 3. MODAL STYLES --- */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -110,41 +104,38 @@
             opacity: 0; transition: opacity 0.3s ease;
         }
         .modal-overlay.show { opacity: 1; }
-        
+       
         .modal-content {
             background: var(--card); width: 90%; max-width: 500px; max-height: 80vh;
-            border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
+            border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
             display: flex; flex-direction: column;
             transform: translateY(20px); transition: transform 0.3s ease;
         }
         .modal-overlay.show .modal-content { transform: translateY(0); }
-
         .modal-header {
             padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: flex-start;
         }
-        
+       
         /* New Wrapper for modal header details */
         .modal-header-details {
             display: flex; flex-direction: column;
         }
-        
+       
         /* Style for Bank Name in Modal (matches .card-label) */
         .modal-bank-label {
             font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); margin-bottom: 4px;
         }
-        
+       
         .modal-title { margin: 0; font-size: 1.1rem; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-        
+       
         /* Style for Card Number/Expiry in Modal Header */
         .modal-card-meta {
             font-family: monospace; font-size: 0.9rem; color: var(--accent-dark); letter-spacing: 0.05em; margin-top: 6px;
         }
-
         .close-btn { background: none; border: none; font-size: 1.8rem; line-height: 1; cursor: pointer; color: var(--muted); padding: 0 5px; margin-left: 10px; }
         .close-btn:hover { color: var(--danger); }
-
         .modal-body { padding: 20px; overflow-y: auto; }
-        
+       
         /* History Items */
         .hist-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
         .hist-row:last-child { border-bottom: none; }
@@ -153,24 +144,23 @@
         .hist-meta { font-size: 0.75rem; color: var(--muted); display: flex; gap: 8px; }
         .hist-tag { background: #f0f0f0; padding: 1px 6px; border-radius: 3px; font-size: 0.7rem; }
         .hist-amt { font-weight: 400; color: var(--accent-dark); font-family: monospace; font-size: 0.95rem; }
-
         /* Loading & Error States */
         .loading { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 40px; font-style: italic; }
         .error { grid-column: 1 / -1; text-align: center; color: var(--danger); padding: 40px; background: var(--danger-bg); border-radius: 8px; }
-
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(166, 52, 52, 0.4); }
             70% { box-shadow: 0 0 0 6px rgba(166, 52, 52, 0); }
             100% { box-shadow: 0 0 0 0 rgba(166, 52, 52, 0); }
         }
+        .cat-summary { margin-bottom: 20px; }
+        .cat-summary table th, .cat-summary table td { font-size: 0.8rem; color: var(--text); }
+        .cat-summary table th { font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
     </style>
 </head>
 <body>
-
     <div id="card-grid" class="card-grid">
         <div class="loading">Loading dashboard data...</div>
     </div>
-
     <div id="history-modal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content">
             <div class="modal-header">
@@ -182,26 +172,22 @@
                 </div>
         </div>
     </div>
-
     <script>
         // *** CONFIGURATION ***
-        const API_URL = "https://script.google.com/macros/s/AKfycbwsLnD1B0Gb9TQssAiEYwSGwHpNsn6fZtJb3-jhI2MDWf7YlVYuzL-5zb3zmzM8Hwupgw/exec"; 
-        
+        const API_URL = "https://script.google.com/macros/s/AKfycbwsLnD1B0Gb9TQssAiEYwSGwHpNsn6fZtJb3-jhI2MDWf7YlVYuzL-5zb3zmzM8Hwupgw/exec";
+       
         let globalCardData = []; // Store fetched data for modal access
-
         // *** 1. INITIALIZATION ***
         async function initDashboard() {
             const container = document.getElementById('card-grid');
-
             if (API_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
                 container.innerHTML = '<div class="error">Please update the API_URL in the code with your Google Apps Script Web App link.</div>';
                 return;
             }
-
             try {
                 const response = await fetch(API_URL);
                 if (!response.ok) throw new Error('Network response was not ok');
-                
+               
                 const data = await response.json();
                 globalCardData = data; // Save data for modal usage
                 renderCards(data);
@@ -210,30 +196,28 @@
                 container.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
             }
         }
-
         // *** 2. RENDER LOGIC ***
         function renderCards(cards) {
             const container = document.getElementById('card-grid');
-            const today = new Date().getDate(); 
-            
+            const today = new Date().getDate();
+           
             container.innerHTML = ''; // Clear loading state
-
             cards.forEach((card, index) => {
                 // A. Urgent Status
                 let isUrgent = false;
                 const daysUntil = card.dueDay - today;
                 if (daysUntil >= 0 && daysUntil <= 3) isUrgent = true;
-                
+               
                 // B. Progress Bars
                 let progressHTML = '';
                 card.caps.forEach(cap => {
                     const percentage = Math.min((cap.spent / cap.limit) * 100, 100);
                     const isOver = cap.spent > cap.limit;
-                    
+                   
                     // Dashboard uses NO DECIMALS
                     const spentFmt = formatCurrency(cap.spent);
                     const limitFmt = formatCurrency(cap.limit);
-                    
+                   
                     progressHTML += `
                         <div class="cat-progress-row">
                             <div class="progress-stats">
@@ -246,40 +230,48 @@
                         </div>
                     `;
                 });
-
-                // C. Generate Card
+                // C. New: Category Summary (simple list for dashboard overview)
+                let categorySummaryHTML = '<div class="data-row"><span class="data-label">Category Breakdown</span></div>';
+                const sortedCats = Object.entries(card.categorySpend || {}).sort((a, b) => b[1] - a[1]);
+                const totalSpend = sortedCats.reduce((sum, [, amt]) => sum + amt, 0);
+                sortedCats.forEach(([cat, amt]) => {
+                  const pct = totalSpend ? ((amt / totalSpend) * 100).toFixed(0) : 0;
+                  categorySummaryHTML += `
+                    <div class="data-row">
+                      <span class="data-label">${cat || 'Uncategorized'}</span>
+                      <span class="data-val">${formatCurrency(amt)} (${pct}%)</span>
+                    </div>
+                  `;
+                });
+                // D. Generate Card
                 const cardHTML = `
                     <div class="card" onclick="openHistory(${index})">
                         <div class="card-header">
                             <span class="card-label">${card.bank}</span>
                             <span class="due-pill ${isUrgent ? 'urgent' : ''}">Due: ${card.dueDay}${getOrdinal(card.dueDay)}</span>
+                            <span class="due-pill">Stmt: ${card.statementDay}${getOrdinal(card.statementDay)}</span>
                         </div>
-
                         <div class="card-title">${card.name}</div>
                         <div class="card-number">${card.number}</div>
-
                         <div class="progress-container">
                             ${progressHTML}
                         </div>
-                        
+                        ${categorySummaryHTML}
                         <div class="data-row">
                             <span class="data-label">Notes</span>
                             <span class="data-val" style="color:var(--muted)">${card.perks}</span>
                         </div>
                     </div>
                 `;
-
                 container.innerHTML += cardHTML;
             });
         }
-
         // *** 3. MODAL LOGIC ***
         function openHistory(index) {
             const card = globalCardData[index];
             const modal = document.getElementById('history-modal');
             const headerInfo = document.getElementById('modal-header-info');
             const body = document.getElementById('modal-body');
-
             // 1. UPDATE HEADER
             // Bank Name (styled like card-label) + Title + Number/Expiry moved here
             headerInfo.innerHTML = `
@@ -289,14 +281,21 @@
                     ${card.number} • Exp: ${card.expiry}
                 </div>
             `;
-            
+           
             // 2. UPDATE BODY
             body.innerHTML = '';
-            let modalContent = '';
-
-            // Sort history: Newest first
+            let modalContent = '<div class="cat-summary"><h3 style="font-size:0.9rem; margin-bottom:10px; color:var(--text);">Spend by Category</h3>';
+            const sortedCats = Object.entries(card.categorySpend || {}).sort((a, b) => b[1] - a[1]);
+            const totalSpend = sortedCats.reduce((sum, [, amt]) => sum + amt, 0);
+            modalContent += '<table style="width:100%; border-collapse:collapse;">';
+            modalContent += '<thead><tr><th style="text-align:left; padding:4px; border-bottom:1px solid #eee;">Category</th><th style="text-align:right; padding:4px; border-bottom:1px solid #eee;">Spend</th><th style="text-align:right; padding:4px; border-bottom:1px solid #eee;">%</th></tr></thead><tbody>';
+            sortedCats.forEach(([cat, amt]) => {
+              const pct = totalSpend ? ((amt / totalSpend) * 100).toFixed(1) : 0;
+              modalContent += `<tr><td style="padding:4px;">${cat || 'Uncategorized'}</td><td style="text-align:right; padding:4px;">${formatCurrencyDecimals(amt)}</td><td style="text-align:right; padding:4px;">${pct}%</td></tr>`;
+            });
+            modalContent += '</tbody></table></div><hr style="margin:20px 0; border:0; border-top:1px solid #eee;">';
+            // Existing: History List
             const sortedHistory = card.history.sort((a, b) => new Date(b.date) - new Date(a.date));
-
             if (sortedHistory.length === 0) {
                 modalContent += '<p style="text-align:center; color:var(--muted); margin-top:20px;">No transactions recorded this period.</p>';
             } else {
@@ -316,13 +315,10 @@
                     `;
                 });
             }
-
             body.innerHTML = modalContent; // Update the modal body
-
             modal.style.display = 'flex';
             setTimeout(() => { modal.classList.add('show'); }, 10);
         }
-
         function closeModal(e) {
             if (e.target.classList.contains('modal-overlay') || e.target.classList.contains('close-btn')) {
                 const modal = document.getElementById('history-modal');
@@ -330,30 +326,25 @@
                 setTimeout(() => { modal.style.display = 'none'; }, 300); // Wait for transition
             }
         }
-
         // *** 4. HELPER FUNCTIONS ***
         function getOrdinal(n) {
             const s = ["th", "st", "nd", "rd"];
             const v = n % 100;
             return s[(v - 20) % 10] || s[v] || s[0];
         }
-
         // Default formatter: No decimals (for Dashboard)
         function formatCurrency(amount) {
             return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
-
         // New formatter: With decimals (for History Modal)
         function formatCurrencyDecimals(amount) {
             return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
-
         function formatDate(dateString) {
             // Expects yyyy-MM-dd
             const date = new Date(dateString);
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
-
         // Run on load
         document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
