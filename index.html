@@ -5,196 +5,543 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credit Card Dashboard</title>
     <style>
-        /* --- 1. DASHBOARD STYLES --- */
+        /* ============================================
+           ROOT VARIABLES & RESET
+        ============================================ */
         :root {
-            font-family: system-ui, -apple-system, sans-serif;
             --bg: #f5f4f1;
+            --card: #ffffff;
             --accent: #bfa27a;
             --accent-dark: #9b825f;
-            --text: #222222;
-            --muted: #6e6e6e;
-            --card: #ffffff;
-            --danger: #a63434;
-            --danger-bg: #fff0f0;
+            --accent-light: rgba(191, 162, 122, 0.15);
+            --text: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --muted: #7a7a7a;
+            --border: #e8e6e3;
+            --border-light: #f0eeeb;
+            --danger: #c44;
+            --danger-bg: #fff5f5;
+            --danger-light: rgba(204, 68, 68, 0.1);
+            --success: #4a9;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
+            --radius: 16px;
+            --radius-sm: 8px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
         }
-        body { background: var(--bg); padding: 40px; margin: 0; }
-        
-        /* Grid Layout */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        @media (min-width: 768px) {
+            body { padding: 40px; }
+        }
+
+        /* ============================================
+           CARD GRID LAYOUT
+        ============================================ */
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* --- 2. CARD COMPONENT STYLES --- */
-        .card { 
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            background: var(--card); 
-            padding: 24px; 
-            border-radius: 14px; 
-            border: 1px solid rgba(0, 0, 0, 0.05); 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
-            display: flex; 
-            flex-direction: column;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-            position: relative;
+        @media (min-width: 768px) {
+            .card-grid {
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+                gap: 24px;
+            }
         }
 
-        /* Hover Effect */
-        .card:hover { 
-            transform: translateY(-4px); 
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08); 
+        /* ============================================
+           CARD COMPONENT
+        ============================================ */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
             border-color: var(--accent);
         }
 
-        /* Hover Icon */
-        .card::after {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            width: 24px; 
-            height: 24px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            background-color: var(--muted);
-            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E") no-repeat 50% 50%;
-            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E") no-repeat 50% 50%;
-            mask-size: cover; 
-        }
-        .card:hover::after { opacity: 1; background-color: var(--accent-dark); }
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
-        .card-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); }
-        
-        .due-pill { 
-            background: rgba(185, 162, 138, 0.15); 
-            color: var(--accent-dark); 
-            font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; font-weight: 600; letter-spacing: 0.05em; transition: all 0.3s ease;
-            margin-right: 0; 
-        }
-        .due-pill.urgent {
-            background-color: var(--danger-bg); color: var(--danger); border: 1px solid rgba(166, 52, 52, 0.2); animation: pulse 2s infinite;
+        /* Card Header */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4px;
         }
 
-        /* Typography */
-        .card-title { font-size: 1.1rem; font-weight: 600; color: var(--text); text-transform: uppercase; line-height: 1.2; }
-        .card-number { font-family: monospace; font-size: 1rem; color: var(--accent-dark); letter-spacing: 0.05em; margin-bottom: 20px; }
-
-        /* Data Rows */
-        .data-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; border-bottom: 1px dashed #eee; padding-bottom: 3px; }
-        .data-row:last-of-type { border-bottom: none; }
-        .data-label { font-size: 0.7rem; font-weight: 400; color: var(--muted); }
-        .data-val { font-size: 0.7rem; font-weight: 400; text-align: right; }
-        
-        /* Progress Bars */
-        .progress-container { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed #e0e0e0; }
-        .cat-progress-row { margin-bottom: 12px; }
-        .progress-stats { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; }
-        .cat-name { font-weight: 600; color: var(--text); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;}
-        .cat-math { font-size: 0.75rem; color: var(--muted); font-family: monospace;}
-        .cat-math strong { color: var(--text); }
-        
-        .progress-track { width: 100%; height: 6px; background-color: #f0f0f0; border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background-color: var(--accent-dark); border-radius: 10px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        .progress-fill.over-limit { background-color: var(--danger); }
-
-        /* --- 3. MODAL STYLES --- */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;
-            backdrop-filter: blur(3px);
-            opacity: 0; transition: opacity 0.3s ease;
-        }
-        .modal-overlay.show { opacity: 1; }
-        
-        .modal-content {
-            background: var(--card); width: 90%; max-width: 500px; max-height: 80vh;
-            border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
-            display: flex; flex-direction: column;
-            transform: translateY(20px); transition: transform 0.3s ease;
-        }
-        .modal-overlay.show .modal-content { transform: translateY(0); }
-
-        .modal-header {
-            padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: flex-start;
-        }
-        
-        /* New Wrapper for modal header details */
-        .modal-header-details {
-            display: flex; flex-direction: column;
-        }
-        
-        /* Style for Bank Name in Modal (matches .card-label) */
-        .modal-bank-label {
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); margin-bottom: 4px;
-        }
-        
-        .modal-title { margin: 0; font-size: 1.1rem; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-        
-        /* Style for Card Number/Expiry in Modal Header */
-        .modal-card-meta {
-            font-family: monospace; font-size: 0.9rem; color: var(--accent-dark); letter-spacing: 0.05em; margin-top: 6px;
+        .card-bank {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
         }
 
-        .close-btn { background: none; border: none; font-size: 1.8rem; line-height: 1; cursor: pointer; color: var(--muted); padding: 0 5px; margin-left: 10px; }
-        .close-btn:hover { color: var(--danger); }
+        .due-badge {
+            background: var(--accent-light);
+            color: var(--accent-dark);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 6px;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
 
-        .modal-body { padding: 20px; overflow-y: auto; }
-        
-        /* History Items */
-        .hist-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
-        .hist-row:last-child { border-bottom: none; }
-        .hist-info { display: flex; flex-direction: column; gap: 2px; }
-        .hist-merch { font-weight: 600; color: var(--text); font-size: 0.9rem; }
-        .hist-meta { font-size: 0.75rem; color: var(--muted); display: flex; gap: 8px; }
-        .hist-tag { background: #f0f0f0; padding: 1px 6px; border-radius: 3px; font-size: 0.7rem; }
-        .hist-amt { font-weight: 400; color: var(--accent-dark); font-family: monospace; font-size: 0.95rem; }
-
-        /* Loading & Error States */
-        .loading { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 40px; font-style: italic; }
-        .error { grid-column: 1 / -1; text-align: center; color: var(--danger); padding: 40px; background: var(--danger-bg); border-radius: 8px; }
+        .due-badge.urgent {
+            background: var(--danger-light);
+            color: var(--danger);
+            animation: pulse 2s infinite;
+        }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(166, 52, 52, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(166, 52, 52, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(166, 52, 52, 0); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(204, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 0 6px rgba(204, 68, 68, 0); }
+        }
+
+        /* Card Title & Number */
+        .card-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.01em;
+            line-height: 1.3;
+            margin-bottom: 2px;
+        }
+
+        .card-number {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--accent-dark);
+            letter-spacing: 0.05em;
+            margin-bottom: 20px;
+        }
+
+        /* ============================================
+           PROGRESS BARS
+        ============================================ */
+        .progress-section {
+            margin-bottom: 20px;
+        }
+
+        .progress-item {
+            margin-bottom: 14px;
+        }
+
+        .progress-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 6px;
+        }
+
+        .progress-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .progress-values {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .progress-values strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background: var(--border-light);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border-radius: 3px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-fill.over-limit {
+            background: linear-gradient(90deg, #e57373 0%, var(--danger) 100%);
+        }
+
+        /* ============================================
+           NOTES SECTION
+        ============================================ */
+        .notes-section {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px dashed var(--border);
+        }
+
+        .notes-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .notes-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--muted);
+        }
+
+        .notes-value {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: right;
+            max-width: 60%;
+        }
+
+        /* ============================================
+           MODAL STYLES
+        ============================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+        }
+
+        .modal {
+            background: var(--card);
+            width: 100%;
+            max-width: 480px;
+            max-height: 85vh;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            transform: translateY(20px) scale(0.98);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .modal-overlay.show .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        /* Modal Header */
+        .modal-header {
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .modal-card-info {
+            flex: 1;
+        }
+
+        .modal-bank {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .modal-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .modal-number {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--accent-dark);
+            letter-spacing: 0.05em;
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--border-light);
+            color: var(--muted);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        .close-btn:hover {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        /* Modal Body */
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        /* Transaction List */
+        .transaction-list {
+            padding: 8px 0;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 14px 24px;
+            transition: background 0.15s ease;
+        }
+
+        .transaction-item:hover {
+            background: var(--bg);
+        }
+
+        .transaction-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .transaction-merchant {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .transaction-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .transaction-date {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .transaction-category {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border-radius: 4px;
+            background: var(--border-light);
+            color: var(--text-secondary);
+        }
+
+        /* Category Colors */
+        .transaction-category.dining { background: #fef3c7; color: #92400e; }
+        .transaction-category.shopping { background: #dbeafe; color: #1e40af; }
+        .transaction-category.transport { background: #d1fae5; color: #065f46; }
+        .transaction-category.grocery { background: #e0e7ff; color: #3730a3; }
+        .transaction-category.subscription { background: #fce7f3; color: #9d174d; }
+        .transaction-category.travel { background: #ccfbf1; color: #0f766e; }
+        .transaction-category.work { background: #f3e8ff; color: #6b21a8; }
+
+        .transaction-amount {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text);
+            text-align: right;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--muted);
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 12px;
+            opacity: 0.4;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+        }
+
+        /* ============================================
+           LOADING & ERROR STATES
+        ============================================ */
+        .loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--muted);
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 24px;
+            background: var(--danger-bg);
+            color: var(--danger);
+            border-radius: var(--radius);
+            border: 1px solid rgba(204, 68, 68, 0.2);
+        }
+
+        /* ============================================
+           RESPONSIVE ADJUSTMENTS
+        ============================================ */
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .modal {
+                max-height: 90vh;
+            }
+
+            .modal-header {
+                padding: 20px;
+            }
+
+            .transaction-item {
+                padding: 12px 20px;
+            }
         }
     </style>
 </head>
 <body>
-
+    <!-- Card Grid Container -->
     <div id="card-grid" class="card-grid">
-        <div class="loading">Loading dashboard data...</div>
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Loading dashboard...</p>
+        </div>
     </div>
 
+    <!-- Transaction History Modal -->
     <div id="history-modal" class="modal-overlay" onclick="closeModal(event)">
-        <div class="modal-content">
+        <div class="modal" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <div id="modal-header-info" class="modal-header-details">
-                    </div>
-                <button class="close-btn" onclick="closeModal(event)">×</button>
+                <div id="modal-card-info" class="modal-card-info">
+                    <!-- Populated by JS -->
+                </div>
+                <button class="close-btn" onclick="closeModal(event)" aria-label="Close">×</button>
             </div>
             <div id="modal-body" class="modal-body">
-                </div>
+                <!-- Populated by JS -->
+            </div>
         </div>
     </div>
 
     <script>
-        // *** CONFIGURATION ***
-        const API_URL = "https://script.google.com/macros/s/AKfycbxHLLcpKFbZc1YEdoCBVILoG1bsMmxHEhZ7EFuzleVLQw5pyKkgdnHjGceEKbdwFfg/exec"; 
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const API_URL = "hhttps://script.google.com/macros/s/AKfycbyEAsE12ebakDPaPp63-ZCviKPGW6WsBLOsag-szeWP8YX_8IQiN--bI4yvXq95Mn6fVg/exec";
         
-        let globalCardData = []; // Store fetched data for modal access
+        let globalCardData = [];
 
-        // *** 1. INITIALIZATION ***
+        // ============================================
+        // INITIALIZATION
+        // ============================================
         async function initDashboard() {
             const container = document.getElementById('card-grid');
-
+            
             if (API_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
-                container.innerHTML = '<div class="error">Please update the API_URL in the code with your Google Apps Script Web App link.</div>';
+                container.innerHTML = '<div class="error">Please update the API_URL with your Google Apps Script Web App URL.</div>';
                 return;
             }
 
@@ -203,69 +550,82 @@
                 if (!response.ok) throw new Error('Network response was not ok');
                 
                 const data = await response.json();
-                globalCardData = data; // Save data for modal usage
+                globalCardData = data;
                 renderCards(data);
             } catch (error) {
-                console.error(error);
+                console.error('Dashboard Error:', error);
                 container.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
             }
         }
 
-        // *** 2. RENDER LOGIC ***
+        // ============================================
+        // RENDER CARDS
+        // ============================================
         function renderCards(cards) {
             const container = document.getElementById('card-grid');
-            const today = new Date().getDate(); 
+            const today = new Date().getDate();
             
-            container.innerHTML = ''; // Clear loading state
+            container.innerHTML = '';
+
+            if (!cards || cards.length === 0) {
+                container.innerHTML = `
+                    <div class="loading">
+                        <p>No cards configured yet.</p>
+                    </div>
+                `;
+                return;
+            }
 
             cards.forEach((card, index) => {
-                // A. Urgent Status
+                // Calculate urgency (due within 3 days)
                 let isUrgent = false;
                 const daysUntil = card.dueDay - today;
                 if (daysUntil >= 0 && daysUntil <= 3) isUrgent = true;
-                
-                // B. Progress Bars
-                let progressHTML = '';
-                card.caps.forEach(cap => {
-                    const percentage = Math.min((cap.spent / cap.limit) * 100, 100);
-                    const isOver = cap.spent > cap.limit;
-                    
-                    // Dashboard uses NO DECIMALS
-                    const spentFmt = formatCurrency(cap.spent);
-                    const limitFmt = formatCurrency(cap.limit);
-                    
-                    progressHTML += `
-                        <div class="cat-progress-row">
-                            <div class="progress-stats">
-                                <span class="cat-name">${cap.name}</span>
-                                <span class="cat-math"><strong>${spentFmt}</strong> / ${limitFmt}</span>
-                            </div>
-                            <div class="progress-track">
-                                <div class="progress-fill ${isOver ? 'over-limit' : ''}" style="width: ${percentage}%;"></div>
-                            </div>
-                        </div>
-                    `;
-                });
 
-                // C. Generate Card
+                // Build progress bars HTML
+                let progressHTML = '';
+                if (card.caps && card.caps.length > 0) {
+                    card.caps.forEach(cap => {
+                        const percentage = Math.min((cap.spent / cap.limit) * 100, 100);
+                        const isOver = cap.spent > cap.limit;
+
+                        progressHTML += `
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <span class="progress-name">${cap.name}</span>
+                                    <span class="progress-values">
+                                        <strong>${formatCurrency(cap.spent)}</strong> / ${formatCurrency(cap.limit)}
+                                    </span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill ${isOver ? 'over-limit' : ''}" 
+                                         style="width: ${percentage}%;"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Generate card HTML
                 const cardHTML = `
                     <div class="card" onclick="openHistory(${index})">
                         <div class="card-header">
-                            <span class="card-label">${card.bank}</span>
-                            <span class="due-pill ${isUrgent ? 'urgent' : ''}">Due: ${card.dueDay}${getOrdinal(card.dueDay)}</span>
+                            <span class="card-bank">${card.bank}</span>
+                            <span class="due-badge ${isUrgent ? 'urgent' : ''}">Due: ${card.dueDay}${getOrdinal(card.dueDay)}</span>
                         </div>
-
-                        <div class="card-title">${card.name}</div>
+                        <div class="card-name">${card.name}</div>
                         <div class="card-number">${card.number}</div>
-
-                        <div class="progress-container">
-                            ${progressHTML}
-                        </div>
                         
-                        <div class="data-row">
-                            <span class="data-label">Notes</span>
-                            <span class="data-val" style="color:var(--muted)">${card.perks}</span>
-                        </div>
+                        ${progressHTML ? `<div class="progress-section">${progressHTML}</div>` : ''}
+                        
+                        ${card.perks ? `
+                            <div class="notes-section">
+                                <div class="notes-row">
+                                    <span class="notes-label">Notes</span>
+                                    <span class="notes-value">${card.perks}</span>
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                 `;
 
@@ -273,88 +633,126 @@
             });
         }
 
-        // *** 3. MODAL LOGIC ***
+        // ============================================
+        // MODAL FUNCTIONS
+        // ============================================
         function openHistory(index) {
             const card = globalCardData[index];
             const modal = document.getElementById('history-modal');
-            const headerInfo = document.getElementById('modal-header-info');
+            const cardInfo = document.getElementById('modal-card-info');
             const body = document.getElementById('modal-body');
 
-            // 1. UPDATE HEADER
-            // Bank Name (styled like card-label) + Title + Number/Expiry moved here
-            headerInfo.innerHTML = `
-                <span class="modal-bank-label">${card.bank}</span>
-                <h2 class="modal-title">${card.name}</h2>
-                <div class="modal-card-meta">
-                    ${card.number} • Exp: ${card.expiry}
-                </div>
+            // Update modal header
+            cardInfo.innerHTML = `
+                <div class="modal-bank">${card.bank}</div>
+                <div class="modal-name">${card.name}</div>
+                <div class="modal-number">${card.number} • Exp: ${card.expiry || 'N/A'}</div>
             `;
-            
-            // 2. UPDATE BODY
-            body.innerHTML = '';
-            let modalContent = '';
 
-            // Sort history: Newest first
-            const sortedHistory = card.history.sort((a, b) => new Date(b.date) - new Date(a.date));
+            // Build transaction list
+            const sortedHistory = (card.history || []).sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            let bodyHTML = '';
 
             if (sortedHistory.length === 0) {
-                modalContent += '<p style="text-align:center; color:var(--muted); margin-top:20px;">No transactions recorded this period.</p>';
+                bodyHTML = `
+                    <div class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        <p>No transactions this period</p>
+                    </div>
+                `;
             } else {
+                bodyHTML = '<div class="transaction-list">';
+                
                 sortedHistory.forEach(tx => {
-                    // Modal uses WITH DECIMALS for amounts
-                    modalContent += `
-                        <div class="hist-row">
-                            <div class="hist-info">
-                                <span class="hist-merch">${tx.merchant}</span>
-                                <div class="hist-meta">
-                                    <span>${formatDate(tx.date)}</span>
-                                    <span class="hist-tag">${tx.category}</span>
+                    const categoryClass = (tx.category || '').toLowerCase().replace(/\s+/g, '-');
+                    
+                    bodyHTML += `
+                        <div class="transaction-item">
+                            <div class="transaction-info">
+                                <div class="transaction-merchant">${tx.merchant || 'Unknown'}</div>
+                                <div class="transaction-meta">
+                                    <span class="transaction-date">${formatDate(tx.date)}</span>
+                                    ${tx.category ? `<span class="transaction-category ${categoryClass}">${tx.category}</span>` : ''}
                                 </div>
                             </div>
-                            <span class="hist-amt">${formatCurrencyDecimals(tx.amount)}</span>
+                            <div class="transaction-amount">${formatCurrencyDecimals(tx.amount)}</div>
                         </div>
                     `;
                 });
+                
+                bodyHTML += '</div>';
             }
 
-            body.innerHTML = modalContent; // Update the modal body
+            body.innerHTML = bodyHTML;
 
+            // Show modal with animation
             modal.style.display = 'flex';
-            setTimeout(() => { modal.classList.add('show'); }, 10);
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+            });
+
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal(e) {
-            if (e.target.classList.contains('modal-overlay') || e.target.classList.contains('close-btn')) {
-                const modal = document.getElementById('history-modal');
-                modal.classList.remove('show');
-                setTimeout(() => { modal.style.display = 'none'; }, 300); // Wait for transition
+            if (e && e.target !== e.currentTarget && !e.target.classList.contains('close-btn')) {
+                return;
             }
+
+            const modal = document.getElementById('history-modal');
+            modal.classList.remove('show');
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 300);
         }
 
-        // *** 4. HELPER FUNCTIONS ***
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('history-modal');
+                if (modal.classList.contains('show')) {
+                    closeModal({ target: modal, currentTarget: modal });
+                }
+            }
+        });
+
+        // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
         function getOrdinal(n) {
-            const s = ["th", "st", "nd", "rd"];
+            const s = ['th', 'st', 'nd', 'rd'];
             const v = n % 100;
             return s[(v - 20) % 10] || s[v] || s[0];
         }
 
-        // Default formatter: No decimals (for Dashboard)
         function formatCurrency(amount) {
-            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            return '$' + Math.round(amount).toLocaleString('en-US');
         }
 
-        // New formatter: With decimals (for History Modal)
         function formatCurrencyDecimals(amount) {
-            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return '$' + amount.toLocaleString('en-US', { 
+                minimumFractionDigits: 2, 
+                maximumFractionDigits: 2 
+            });
         }
 
         function formatDate(dateString) {
-            // Expects yyyy-MM-dd
             const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
         }
 
-        // Run on load
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
 </body>
