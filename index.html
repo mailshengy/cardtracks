@@ -3,249 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet Command</title>
+    <title>Finance Dashboard V4</title>
     <style>
-        :root {
-            --bg: #F2F4F8;
-            --surface: #FFFFFF;
-            --primary: #2D3748;
-            --accent: #4FD1C5;
-            --danger: #FC8181;
-            --text-main: #1A202C;
-            --text-muted: #718096;
-            --border: #E2E8F0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .header {
-            max-width: 1200px;
-            margin: 0 auto 20px auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header h1 { font-size: 1.5rem; margin: 0; color: var(--primary); }
-        .last-updated { font-size: 0.8rem; color: var(--text-muted); }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* CARD STYLES */
-        .card {
-            background: var(--surface);
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-            border: 1px solid var(--border);
-            padding: 20px;
-            transition: transform 0.2s;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-        }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.06); }
-
-        .card-top { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .bank-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
-        .card-meta { font-family: monospace; font-size: 0.85rem; color: var(--text-muted); }
-        
-        .card-name { font-size: 1.25rem; font-weight: 600; color: var(--primary); margin-bottom: 20px; }
-        
-        .pill-container { display: flex; gap: 8px; margin-bottom: 20px; }
-        .pill { 
-            font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; font-weight: 600; 
-            background: #EDF2F7; color: var(--text-muted); 
-        }
-        .pill.urgent { background: #FFF5F5; color: #C53030; border: 1px solid #FEB2B2; }
-
-        /* PROGRESS BARS */
-        .cap-section { margin-top: auto; }
-        .cap-row { margin-bottom: 12px; }
-        .cap-header { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; }
-        .cap-title { font-weight: 600; }
-        .cap-nums { color: var(--text-muted); font-family: monospace; }
-        
-        .progress-bg { background: #EDF2F7; height: 6px; border-radius: 3px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--primary); border-radius: 3px; width: 0%; transition: width 0.5s; }
-        .progress-fill.danger { background: var(--danger); }
-
-        /* MODAL */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); z-index: 999;
-            align-items: center; justify-content: center;
-        }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: var(--surface); width: 90%; max-width: 500px; max-height: 85vh;
-            border-radius: 12px; display: flex; flex-direction: column;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .modal-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .modal-body { padding: 0; overflow-y: auto; }
-        
-        .tx-list { list-style: none; padding: 0; margin: 0; }
-        .tx-item { 
-            padding: 12px 20px; border-bottom: 1px solid var(--border); 
-            display: flex; justify-content: space-between; align-items: center; 
-        }
-        .tx-left { display: flex; flex-direction: column; }
-        .tx-merchant { font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
-        .tx-date { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
-        .tx-amt { font-family: monospace; font-weight: 600; font-size: 1rem; color: var(--primary); }
-        
-        .btn-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
-
-        /* LOADING */
-        .loading { grid-column: 1/-1; text-align: center; padding: 50px; color: var(--text-muted); }
+        :root { --bg: #f4f6f8; --card: #ffffff; --primary: #2563eb; --text: #1e293b; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); padding: 20px; max-width: 600px; margin: 0 auto; }
+        .card { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 16px; }
+        h1 { font-size: 20px; margin-bottom: 20px; }
+        h2 { font-size: 16px; margin: 0 0 10px 0; color: #64748b; }
+        .amount { font-size: 24px; font-weight: bold; }
+        .bar-bg { background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 8px; }
+        .bar-fill { height: 100%; background: var(--primary); transition: width 0.3s; }
+        .tx-list { margin-top: 10px; border-top: 1px solid #f1f5f9; padding-top: 10px; }
+        .tx-item { display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0; }
+        .tx-meta { color: #94a3b8; font-size: 12px; }
+        .forex { color: #d97706; font-size: 12px; }
+        .loading { text-align: center; color: #64748b; margin-top: 50px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Wallet Command</h1>
-        <span class="last-updated" id="last-updated">Updating...</span>
-    </div>
-
-    <div id="grid" class="grid">
-        <div class="loading">Loading cached data...</div>
-    </div>
-
-    <div id="modal" class="modal" onclick="closeModal(event)">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin:0" id="modal-title">Card History</h3>
-                <button class="btn-close" onclick="closeModal(event)">×</button>
-            </div>
-            <div class="modal-body" id="modal-list">
-                </div>
-        </div>
+    <h1>💳 Card Tracker v4</h1>
+    <div id="app">
+        <div class="loading">Loading Finance Data...</div>
     </div>
 
     <script>
-        // REPLACE THIS WITH YOUR DEPLOYED WEB APP URL
-        const API_URL = "https://script.google.com/macros/s/AKfycbwsLnD1B0Gb9TQssAiEYwSGwHpNsn6fZtJb3-jhI2MDWf7YlVYuzL-5zb3zmzM8Hwupgw/exec";
+        // PASTE YOUR APPS SCRIPT WEB APP URL HERE
+        const API_URL = "https://script.google.com/macros/s/AKfycbyEAsE12ebakDPaPp63-ZCviKPGW6WsBLOsag-szeWP8YX_8IQiN--bI4yvXq95Mn6fVg/exec";
 
-        let allData = [];
-
-        async function init() {
+        async function loadData() {
             try {
-                const res = await fetch(API_URL);
-                const json = await res.json();
-                
-                document.getElementById('last-updated').innerText = `Synced: ${json.updated}`;
-                allData = json.cards;
-                render(json.cards);
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                render(data);
             } catch (e) {
-                document.getElementById('grid').innerHTML = `<div class="loading" style="color:red">Error: ${e.message}</div>`;
+                document.getElementById('app').innerHTML = `<div style="color:red">Error loading data.</div>`;
             }
         }
 
-        function render(cards) {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = '';
-            
-            const today = new Date().getDate();
+        function render(data) {
+            const app = document.getElementById('app');
+            app.innerHTML = '';
 
-            cards.forEach((card, idx) => {
-                // Logic: Urgent if due within 3 days
-                const daysLeft = card.dueDay - today;
-                const isUrgent = daysLeft >= 0 && daysLeft <= 3;
+            // Group transactions by Card
+            data.cards.forEach(card => {
+                // Calculate Usage
+                const cardTx = data.transactions.filter(t => t.cardName === card.name);
+                const totalUsed = cardTx.reduce((sum, t) => sum + parseFloat(t.amountSGD), 0);
+                const percent = Math.min(100, (totalUsed / card.capLimit) * 100);
 
-                // Caps HTML
-                let capsHtml = '';
-                if(card.caps.length > 0) {
-                    capsHtml += `<div class="cap-section">`;
-                    card.caps.forEach(cap => {
-                        const pct = Math.min((cap.spent / cap.limit) * 100, 100);
-                        const isOver = cap.spent >= cap.limit;
-                        capsHtml += `
-                            <div class="cap-row">
-                                <div class="cap-header">
-                                    <span class="cap-title">${cap.name}</span>
-                                    <span class="cap-nums">$${Math.round(cap.spent)} / $${cap.limit}</span>
+                // Build HTML
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card';
+                cardEl.innerHTML = `
+                    <h2>${card.name} (..${card.last4})</h2>
+                    <div class="amount">$${totalUsed.toFixed(2)} <span style="font-size:14px; color:#94a3b8">/ $${card.capLimit}</span></div>
+                    <div class="bar-bg"><div class="bar-fill" style="width: ${percent}%"></div></div>
+                    
+                    <div class="tx-list">
+                        ${cardTx.slice(0, 5).map(t => `
+                            <div class="tx-item">
+                                <div>
+                                    <div>${t.merchant}</div>
+                                    <div class="tx-meta">${new Date(t.date).toLocaleDateString()} • ${t.category}</div>
+                                    ${t.isForex ? `<div class="forex">${t.originalCurrency} ${t.originalAmount}</div>` : ''}
                                 </div>
-                                <div class="progress-bg">
-                                    <div class="progress-fill ${isOver ? 'danger' : ''}" style="width:${pct}%"></div>
-                                </div>
+                                <div>$${parseFloat(t.amountSGD).toFixed(2)}</div>
                             </div>
-                        `;
-                    });
-                    capsHtml += `</div>`;
-                } else {
-                    capsHtml = `<div class="cap-section" style="color:var(--text-muted); font-size:0.8rem">No active spend caps.</div>`;
-                }
-
-                // Card HTML
-                const html = `
-                    <div class="card" onclick="openModal(${idx})">
-                        <div class="card-top">
-                            <span class="bank-name">${card.bank}</span>
-                            <span class="card-meta">•••• ${card.number}</span>
-                        </div>
-                        <div class="card-name">${card.name}</div>
-                        <div class="pill-container">
-                            <span class="pill ${isUrgent ? 'urgent' : ''}">Due: ${card.dueDay}${getOrdinal(card.dueDay)}</span>
-                            <span class="pill">Stmt: ${card.statementDay}${getOrdinal(card.statementDay)}</span>
-                        </div>
-                        ${capsHtml}
+                        `).join('')}
                     </div>
                 `;
-                grid.innerHTML += html;
+                app.appendChild(cardEl);
             });
         }
 
-        function openModal(idx) {
-            const card = allData[idx];
-            document.getElementById('modal-title').innerText = `${card.name} History`;
-            const list = document.getElementById('modal-list');
-            list.innerHTML = '';
-
-            if (card.history.length === 0) {
-                list.innerHTML = '<div style="padding:20px; text-align:center; color:#718096">No recent transactions.</div>';
-            } else {
-                let ul = '<ul class="tx-list">';
-                card.history.forEach(tx => {
-                    ul += `
-                        <li class="tx-item">
-                            <div class="tx-left">
-                                <span class="tx-merchant">${tx.m}</span>
-                                <span class="tx-date">${tx.d} • ${tx.c}</span>
-                            </div>
-                            <span class="tx-amt">$${tx.a.toFixed(2)}</span>
-                        </li>
-                    `;
-                });
-                ul += '</ul>';
-                list.innerHTML = ul;
-            }
-            document.getElementById('modal').classList.add('active');
-        }
-
-        function closeModal(e) {
-            if(e.target.id === 'modal' || e.target.classList.contains('btn-close')) {
-                document.getElementById('modal').classList.remove('active');
-            }
-        }
-
-        function getOrdinal(n) {
-            const s = ["th", "st", "nd", "rd"];
-            const v = n % 100;
-            return s[(v - 20) % 10] || s[v] || s[0];
-        }
-
-        init();
+        loadData();
     </script>
 </body>
 </html>
