@@ -546,7 +546,9 @@
             }
 
             try {
-                const response = await fetch(API_URL);
+                // We add ?action=getData to tell the script we want JSON
+// We add &t=... to prevent the browser from caching old data
+const response = await fetch(SCRIPT_URL + '?action=getData&t=' + new Date().getTime());
                 if (!response.ok) throw new Error('Network response was not ok');
                 
                 const data = await response.json();
