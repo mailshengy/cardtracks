@@ -546,14 +546,26 @@
             }
 
             try {
-                // We add ?action=getData to tell the script we want JSON
-// We add &t=... to prevent the browser from caching old data
-const response = await fetch(API_URL + '?action=getData&t=' + new Date().getTime());
+                const response = await fetch(API_URL + '?action=getData&t=' + new Date().getTime());
                 if (!response.ok) throw new Error('Network response was not ok');
                 
-                const data = await response.json();
-                globalCardData = data;
-                renderCards(data);
+                const rawData = await response.json();
+                console.log("Raw data from Google:", rawData); // This is crucial for debugging!
+
+                // Check if Google returned an error inside the JSON
+                if (rawData.error) {
+                    throw new Error(rawData.error);
+                }
+
+                // Safely extract the array, handling cases where it might be wrapped in an object
+                const cardArray = Array.isArray(rawData) ? rawData : (rawData.data || rawData.cards || []);
+                
+                if (!Array.isArray(cardArray)) {
+                    throw new Error("Data received is not a valid array.");
+                }
+
+                globalCardData = cardArray;
+                renderCards(cardArray);
             } catch (error) {
                 console.error('Dashboard Error:', error);
                 container.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
